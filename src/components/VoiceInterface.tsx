@@ -161,50 +161,61 @@ Please provide specific investment advice tailored to their profile and the exac
   const isOnboarding = !user.onboardingComplete && currentQuestionIndex < onboardingQuestions.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-600 to-sky-400 flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-violet-800 flex flex-col relative overflow-hidden">
       {/* Abstract Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-20 w-20 h-20 bg-sky-300 rounded-full opacity-15 animate-pulse"></div>
-        <div className="absolute top-1/3 right-10 w-32 h-32 bg-purple-300 rounded-full opacity-10 animate-bounce"></div>
-        <div className="absolute bottom-1/4 left-10 w-24 h-24 bg-gradient-to-r from-purple-400 to-sky-300 rounded-full opacity-20"></div>
+        {/* Enhanced floating elements */}
+        <div className="absolute top-10 left-20 w-20 h-20 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full opacity-15 animate-pulse blur-sm"></div>
+        <div className="absolute top-1/3 right-10 w-32 h-32 bg-gradient-to-br from-violet-400 to-purple-500 rounded-full opacity-10 animate-bounce blur-sm"></div>
+        <div className="absolute bottom-1/4 left-10 w-24 h-24 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full opacity-20 blur-sm"></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full opacity-25 animate-ping blur-sm"></div>
         
         {/* Financial Chart Lines */}
-        <svg className="absolute inset-0 w-full h-full opacity-5" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M0,60 Q25,40 50,50 T100,30" stroke="url(#voiceGradient1)" strokeWidth="0.3" fill="none" />
-          <path d="M0,80 Q30,60 60,65 T100,45" stroke="url(#voiceGradient2)" strokeWidth="0.2" fill="none" />
+        <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M0,60 Q25,40 50,50 T100,30" stroke="url(#voiceGradient1)" strokeWidth="0.5" fill="none" className="animate-pulse" />
+          <path d="M0,80 Q30,60 60,65 T100,45" stroke="url(#voiceGradient2)" strokeWidth="0.4" fill="none" />
+          <path d="M0,50 Q40,30 70,40 T100,20" stroke="url(#voiceGradient3)" strokeWidth="0.3" fill="none" className="animate-pulse" />
           <defs>
             <linearGradient id="voiceGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#a855f7" />
-              <stop offset="100%" stopColor="#0ea5e9" />
+              <stop offset="0%" stopColor="#8b5cf6" />
+              <stop offset="50%" stopColor="#06b6d4" />
+              <stop offset="100%" stopColor="#10b981" />
             </linearGradient>
             <linearGradient id="voiceGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0ea5e9" />
-              <stop offset="100%" stopColor="#a855f7" />
+              <stop offset="0%" stopColor="#06b6d4" />
+              <stop offset="50%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#ef4444" />
+            </linearGradient>
+            <linearGradient id="voiceGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10b981" />
+              <stop offset="100%" stopColor="#8b5cf6" />
             </linearGradient>
           </defs>
         </svg>
       </div>
       
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-white/20 p-4 relative z-10">
+      <header className="bg-white/95 backdrop-blur-lg shadow-xl border-b border-white/30 p-4 relative z-10">
+        <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-sky-500 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-cyan-500 rounded-2xl flex items-center justify-center shadow-xl border border-white/20">
               <UserIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-purple-800">Fundora</h1>
-              <p className="text-sm text-purple-600">{user.email}</p>
+              <h1 className="text-2xl font-bold text-indigo-900">Fundora</h1>
+              <p className="text-sm text-indigo-600 font-medium">{user.email}</p>
             </div>
           </div>
           
           <button
             onClick={onLogout}
-            className="flex items-center space-x-2 text-purple-600 hover:text-purple-800 
-                     px-3 py-2 rounded-lg hover:bg-purple-50 transition-colors"
+            className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800 
+                     px-4 py-2 rounded-xl hover:bg-indigo-50 transition-all duration-200
+                     border border-indigo-200 hover:border-indigo-300 hover:shadow-md"
           >
-            <LogOut className="w-4 h-4" />
-            <span className="text-sm">Logout</span>
+            <LogOut className="w-5 h-5" />
+            <span className="text-sm font-medium">Logout</span>
           </button>
         </div>
       </header>

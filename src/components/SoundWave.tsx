@@ -31,15 +31,17 @@ export function SoundWave({ isActive, isUser = true }: SoundWaveProps) {
           
           const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
           if (isUser) {
-            gradient.addColorStop(0, '#9333EA');
-            gradient.addColorStop(1, '#0EA5E9');
+            gradient.addColorStop(0, '#8b5cf6');
+            gradient.addColorStop(0.5, '#06b6d4');
+            gradient.addColorStop(1, '#10b981');
           } else {
-            gradient.addColorStop(0, '#0EA5E9');
-            gradient.addColorStop(1, '#9333EA');
+            gradient.addColorStop(0, '#06b6d4');
+            gradient.addColorStop(0.5, '#f59e0b');
+            gradient.addColorStop(1, '#ef4444');
           }
           
           ctx.fillStyle = gradient;
-          ctx.fillRect(x, y, barWidth - 2, barHeight);
+          ctx.fillRect(x, y, barWidth - 3, barHeight);
         }
         time += 1;
       }
@@ -59,9 +61,9 @@ export function SoundWave({ isActive, isUser = true }: SoundWaveProps) {
   return (
     <canvas
       ref={canvasRef}
-      width={300}
-      height={80}
-      className="rounded-lg"
+      width={320}
+      height={100}
+      className="rounded-2xl shadow-lg border border-white/20"
     />
   );
 }
