@@ -95,6 +95,17 @@ export function VoiceInterface({ user, onUpdateUser, onLogout }: VoiceInterfaceP
         (error) => {
           setIsListening(false);
           console.error('Speech recognition error:', error);
+          
+          // Provide user feedback for speech recognition errors
+          let errorMessage = "I'm having trouble hearing you. Please try again.";
+          if (error === 'no-speech') {
+            errorMessage = "I didn't hear anything. Please make sure your microphone is working and try speaking again.";
+          } else if (error === 'not-allowed') {
+            errorMessage = "Microphone access is blocked. Please allow microphone permissions and try again.";
+          }
+          
+          addMessage(errorMessage, false);
+          speakMessage(errorMessage);
         }
       );
     }
