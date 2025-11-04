@@ -130,7 +130,11 @@ function generateFallbackResponse(prompt: string, userPersona?: string, userName
   
   return `Hi ${name}! Based on your profile, you are **${persona}**. Let's create your personalized investment plan.
 
-How much would you like to invest in total (in ₹)?`;
+Would you like my assistance in:
+A) Investing a specific amount (e.g., ₹50,000)
+B) Achieving a specific goal (e.g., buying a house, retirement)
+
+Please tell me which option you prefer!`;
 }
 
 function generateAllocationResponse(amount: number, userPersona?: string): string {

@@ -168,7 +168,13 @@ Please provide specific investment advice tailored to their profile and the exac
       const userName = user.email.split('@')[0];
       const completionMessage = `Perfect! You scored ${personaResult.total_score}/50. You are "${personaResult.persona}" - ${personaResult.description} 
       
-Hi ${userName}! Based on your quiz, you're ${personaResult.persona}. How much do you plan to invest (in ₹)?`;
+Hi ${userName}! Based on your quiz, you're ${personaResult.persona}. 
+
+Would you like my assistance in:
+A) Investing a specific amount (e.g., ₹50,000)
+B) Achieving a specific goal (e.g., buying a house, retirement)
+
+Please tell me which option you prefer!`;
       const responseMessage = addMessage(completionMessage, false);
       speakMessage(completionMessage);
     }
