@@ -1,10 +1,10 @@
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 import { calculateAssetAllocation, type AllocationResult } from './assetAllocation';
 
-export async function getAIResponse(prompt: string, userPersona?: string): Promise<string> {
+export async function getAIResponse(prompt: string, userPersona?: string, userName?: string): Promise<string> {
   if (!OPENAI_API_KEY) {
     // Fallback response when API key is not available
-    return generateFallbackResponse(prompt, userPersona);
+    return generateFallbackResponse(prompt, userPersona, userName);
   }
 
   try {
@@ -19,7 +19,29 @@ export async function getAIResponse(prompt: string, userPersona?: string): Promi
         messages: [
           {
             role: 'system',
-            content: `You are Fundora, a helpful financial AI assistant for Indian users. The user is a ${userPersona || 'Balanced'} investor. 
+            content: `You are Fundora, a helpful financial AI assistant for Indian users. The user is a ${userPersona || 'Balanced'} investor.
+
+Follow this conversational flow:
+
+Step 1: Ask for investment amount
+"Hi ${userName || 'there'}! Based on your quiz, you're ${userPersona}. How much do you plan to invest (in ₹)?"
+
+Step 2: Show portfolio allocation
+"Got it! Here's your personalized portfolio for ₹{{amount}}:
+[Show allocation breakdown]
+Would you like to see how this might grow over time?"
+
+Step 3: Show growth projection
+"Here's a 10-year simulation assuming conservative growth:
+After 10 years, your portfolio could grow to around ₹{{final_value}} (CAGR ≈ {{cagr}}%).
+Would you like me to visualize this as a chart?"
+
+Step 4: Describe visually
+"{{largest_categories}} form the largest share.
+Your portfolio value line rises steadily, showing compounding benefits."
+
+Step 5: Offer next action
+"Would you like to explore the best beginner-friendly products in {{category}} or {{category2}}?"
 
 Guidelines:
 - Provide specific, practical investment advice based on exact amounts mentioned
@@ -53,7 +75,7 @@ Always provide actionable, specific advice with exact amounts and percentages.`
     return data.choices[0].message.content.trim();
   } catch (error) {
     console.error('OpenAI API error:', error);
-    return generateFallbackResponse(prompt, userPersona);
+    return generateFallbackResponse(prompt, userPersona, userName);
   }
 }
 
@@ -97,7 +119,7 @@ function getPersonaGuidelines(persona?: string): string {
   }
 }
 
-function generateFallbackResponse(prompt: string, userPersona?: string): string {
+function generateFallbackResponse(prompt: string, userPersona?: string, userName?: string): string {
   const lowerPrompt = prompt.toLowerCase();
   
   // Extract investment amount from the prompt
@@ -128,7 +150,22 @@ function generateFallbackResponse(prompt: string, userPersona?: string): string 
 
   // Generate dynamic responses based on amount and persona
   if (amount > 0) {
-    return generateAmountBasedResponse(amount, userPersona, lowerPrompt);
+    return generateAmountBasedResponse(amount, userPersona, lowerPrompt, userName);
+  }
+
+  // Check if this is the initial greeting after persona identification
+  if (lowerPrompt.includes('hello') || lowerPrompt.includes('hi') || lowerPrompt.includes('start') || lowerPrompt.includes('begin')) {
+    return generateInitialGreeting(userPersona, userName);
+  }
+
+  // Check for growth projection requests
+  if (lowerPrompt.includes('grow') || lowerPrompt.includes('projection') || lowerPrompt.includes('future') || lowerPrompt.includes('time')) {
+    return "I'd be happy to show you growth projections! Please share your investment amount first so I can calculate your personalized portfolio growth.";
+  }
+
+  // Check for chart/visualization requests
+  if (lowerPrompt.includes('chart') || lowerPrompt.includes('visualize') || lowerPrompt.includes('graph')) {
+    return "I can help visualize your portfolio! Gold, Fixed Income, and Equities typically form the largest shares. Your portfolio value line rises steadily, showing compounding benefits. Would you like to explore specific product categories?";
   }
 
   // Topic-based responses
@@ -154,14 +191,21 @@ function generateFallbackResponse(prompt: string, userPersona?: string): string 
 
   // Default responses based on persona
   if (isGuardian) {
-    return "As The Guardian, focus on capital preservation. Consider FDs, PPF, and debt mutual funds. What specific amount are you looking to invest?";
+    return generateInitialGreeting(userPersona, userName);
   }
   
   if (isMaverick) {
-    return "As The Maverick, you can handle high-risk investments. Equity mutual funds and direct stocks work well. What's your investment amount and timeline?";
+    return generateInitialGreeting(userPersona, userName);
   }
   
-  return "I'd love to help with your investment query! Could you share the amount you're planning to invest and your timeline?";
+  return generateInitialGreeting(userPersona, userName);
+}
+
+function generateInitialGreeting(userPersona?: string, userName?: string): string {
+  const name = userName || 'there';
+  const persona = userPersona || 'Balanced investor';
+  
+  return `Hi ${name}! Based on your quiz, you're ${persona}. How much do you plan to invest (in ₹)?`;
 }
 
 function generateAllocationResponse(result: AllocationResult): string {
@@ -182,7 +226,76 @@ function generateAllocationResponse(result: AllocationResult): string {
   return response;
 }
 
-function generateAmountBasedResponse(amount: number, userPersona?: string, prompt?: string): string {
+function generateAmountBasedResponse(amount: number, userPersona?: string, prompt?: string, userName?: string): string {
+  const lowerPrompt = prompt?.toLowerCase() || '';
+  
+  // Generate allocation using the asset allocation system
+  try {
+    const result = calculateAssetAllocation(userPersona || 'The Explorer', amount);
+    
+    // Check if user is asking about growth projections
+    if (lowerPrompt.includes('grow') || lowerPrompt.includes('projection') || lowerPrompt.includes('time') || lowerPrompt.includes('future')) {
+      return generateGrowthProjectionResponse(result);
+    }
+    
+    // Check if user is asking about charts/visualization
+    if (lowerPrompt.includes('chart') || lowerPrompt.includes('visualize') || lowerPrompt.includes('graph')) {
+      return generateVisualizationResponse(result);
+    }
+    
+    // Default: Show portfolio allocation (Step 2)
+    return generatePortfolioAllocationResponse(result);
+    
+  } catch (error) {
+    console.error('Error calculating allocation:', error);
+    return generateFallbackAmountResponse(amount, userPersona);
+  }
+}
+
+function generatePortfolioAllocationResponse(result: AllocationResult): string {
+  const { persona, total_investment, allocations } = result;
+  
+  let response = `Got it! Here's your personalized portfolio for ₹${total_investment.toLocaleString('en-IN')}:\n\n`;
+  
+  // Add allocation breakdown
+  Object.entries(allocations).forEach(([category, allocation]) => {
+    if (allocation.amount > 0) {
+      response += `${category} — ${allocation.percent}% (₹${allocation.amount.toLocaleString('en-IN')})\n`;
+    }
+  });
+  
+  response += `\nWould you like to see how this might grow over time?`;
+  
+  return response;
+}
+
+function generateGrowthProjectionResponse(result: AllocationResult): string {
+  const { final_value, portfolio_cagr, total_investment } = result;
+  
+  return `Here's a 10-year simulation assuming conservative growth:
+After 10 years, your portfolio could grow to around ₹${final_value.toLocaleString('en-IN')} (CAGR ≈ ${portfolio_cagr}%).
+Would you like me to visualize this as a chart?`;
+}
+
+function generateVisualizationResponse(result: AllocationResult): string {
+  const { allocations, recommended_categories } = result;
+  
+  // Find the largest categories
+  const sortedCategories = Object.entries(allocations)
+    .filter(([_, allocation]) => allocation.amount > 0)
+    .sort((a, b) => b[1].amount - a[1].amount)
+    .slice(0, 3)
+    .map(([category, _]) => category);
+  
+  const largestCategories = sortedCategories.join(', ');
+  
+  return `${largestCategories} form the largest share.
+Your portfolio value line rises steadily, showing compounding benefits.
+
+Would you like to explore the best beginner-friendly products in ${recommended_categories[0]} or ${recommended_categories[1]}?`;
+}
+
+function generateFallbackAmountResponse(amount: number, userPersona?: string): string {
   // Small amounts (under ₹10,000)
   if (amount < 10000) {
     if (userPersona === 'The Guardian') {

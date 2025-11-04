@@ -121,7 +121,8 @@ Context: This user has completed onboarding and been classified as a ${user.pers
 Please provide specific investment advice tailored to their profile and the exact query.`;
       
       try {
-        const aiResponse = await getAIResponse(enhancedPrompt, user.persona);
+        const userName = user.email.split('@')[0]; // Extract name from email
+        const aiResponse = await getAIResponse(enhancedPrompt, user.persona, userName);
         const responseMessage = addMessage(aiResponse, false);
         speakMessage(aiResponse);
       } catch (error) {
@@ -153,7 +154,10 @@ Please provide specific investment advice tailored to their profile and the exac
       
       onUpdateUser(updatedUser);
       
-      const completionMessage = `Perfect! You scored ${personaResult.total_score}/50. You are "${personaResult.persona}" - ${personaResult.description} ${personaResult.financial_advice} What would you like to know about investing?`;
+      const userName = user.email.split('@')[0];
+      const completionMessage = `Perfect! You scored ${personaResult.total_score}/50. You are "${personaResult.persona}" - ${personaResult.description} 
+      
+Hi ${userName}! Based on your quiz, you're ${personaResult.persona}. How much do you plan to invest (in ₹)?`;
       const responseMessage = addMessage(completionMessage, false);
       speakMessage(completionMessage);
     }
