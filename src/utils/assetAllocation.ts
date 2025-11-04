@@ -102,7 +102,67 @@ export function calculateAssetAllocation(persona: string, totalAmount: number): 
     persona,
     total_investment: totalAmount,
     allocations,
-    recommended_categories
+    recommended_categories,
+    ...calculateGrowthProjections(allocations, totalAmount)
+  };
+}
+
+function calculateGrowthProjections(allocations: AssetAllocation, totalAmount: number, years: number = 10) {
+  const year_by_year_projection: YearProjection[] = [];
+  const growth_line_data: LineChartData[] = [];
+  
+  // Calculate year-by-year projections
+  for (let year = 0; year <= years; year++) {
+    let total_value = 0;
+    const asset_breakdown: { [key: string]: number } = {};
+    
+    Object.entries(allocations).forEach(([category, allocation]) => {
+      const cagr = PRODUCT_INTELLIGENCE[category as keyof typeof PRODUCT_INTELLIGENCE].cagr / 100;
+      const future_value = allocation.amount * Math.pow(1 + cagr, year);
+      asset_breakdown[category] = Math.round(future_value);
+      total_value += future_value;
+    });
+    
+    year_by_year_projection.push({
+      year,
+      total_value: Math.round(total_value),
+      asset_breakdown
+    });
+    
+    growth_line_data.push({
+      year,
+      value: Math.round(total_value)
+    });
+  }
+  
+  // Calculate portfolio CAGR
+  const final_value = year_by_year_projection[years].total_value;
+  const portfolio_cagr = Math.round(((Math.pow(final_value / totalAmount, 1 / years) - 1) * 100) * 100) / 100;
+  
+  // Create pie chart data with colors
+  const colors = {
+    'Gold/Silver': '#FFD700',
+    'Govt Schemes': '#4CAF50',
+    'Fixed Income': '#2196F3',
+    'Mutual Funds': '#FF9800',
+    'Equities': '#9C27B0',
+    'Crypto': '#F44336'
+  };
+  
+  const allocation_pie_data: PieChartData[] = Object.entries(allocations)
+    .filter(([_, allocation]) => allocation.amount > 0)
+    .map(([category, allocation]) => ({
+      name: category,
+      value: allocation.amount,
+      color: colors[category as keyof typeof colors]
+    }));
+  
+  return {
+    year_by_year_projection,
+    final_value,
+    portfolio_cagr,
+    allocation_pie_data,
+    growth_line_data
   };
 }
 

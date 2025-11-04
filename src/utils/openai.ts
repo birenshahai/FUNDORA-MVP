@@ -163,6 +163,24 @@ function generateFallbackResponse(prompt: string, userPersona?: string): string 
   return "I'd love to help with your investment query! Could you share the amount you're planning to invest and your timeline?";
 }
 
+function generateAllocationResponse(result: AllocationResult): string {
+  const { persona, total_investment, allocations, final_value, portfolio_cagr } = result;
+  
+  let response = `Perfect! Here's your personalized portfolio for ₹${total_investment.toLocaleString('en-IN')} as ${persona}:\n\n`;
+  
+  // Add allocation breakdown
+  Object.entries(allocations).forEach(([category, allocation]) => {
+    if (allocation.amount > 0) {
+      response += `${category}: ${allocation.percent}% (₹${allocation.amount.toLocaleString('en-IN')})\n`;
+    }
+  });
+  
+  response += `\nProjected value after 10 years: ₹${final_value.toLocaleString('en-IN')} (${portfolio_cagr}% CAGR)\n\n`;
+  response += `Would you like to learn more about any of these categories?`;
+  
+  return response;
+}
+
 function generateAmountBasedResponse(amount: number, userPersona?: string, prompt?: string): string {
   // Small amounts (under ₹10,000)
   if (amount < 10000) {
