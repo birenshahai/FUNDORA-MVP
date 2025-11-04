@@ -64,10 +64,6 @@ function getPersonaGuidelines(persona?: string): string {
 - Focus on tax-saving instruments like PPF and ELSS
 - Recommend shorter lock-in periods and liquid investments`;
   }
-}
-- Suggest 70-80% in FD/PPF/Debt funds, 20-30% in large-cap equity
-- Focus on safe instruments and gradual SIP introduction
-- Emphasize emergency funds and insurance coverage`;
     
     case 'The Planner':
       return `- Focus on goal-based investing and structured planning
@@ -86,9 +82,6 @@ function getPersonaGuidelines(persona?: string): string {
 - Suggest 70-80% in equity (mix of large, mid, small-cap), 20-30% in debt
 - Recommend direct equity, sectoral funds, and international exposure
 - Consider longer investment horizons (5+ years)`;
-- Suggest 70-80% in equity (growth-oriented), 20-30% in debt
-- Recommend systematic equity investments and startup opportunities
-- Emphasize risk management and trend-based strategies`;
     
     case 'The Maverick':
       return `- Focus on aggressive wealth building with high-risk tolerance
@@ -98,9 +91,6 @@ function getPersonaGuidelines(persona?: string): string {
     
     default:
       return `- Balance between growth and stability (Explorer approach)
-- Suggest 60% equity, 40% debt allocation
-- Mix of large-cap stability with mid-cap growth
-- Diversify across asset classes including gold/international`;
 - Suggest 60% equity, 40% debt allocation
 - Mix of large-cap stability with mid-cap growth
 - Diversify across asset classes including gold/international`;
