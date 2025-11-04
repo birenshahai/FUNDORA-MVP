@@ -95,17 +95,25 @@ function generateFallbackResponse(prompt: string, userPersona?: string, userName
     }
   }
 
-  // Generate responses based on amount and conversation flow
-  if (amount > 0) {
-    return generateAllocationResponse(amount, userPersona);
-  }
-
-  // Check for category-specific questions
+  // Check for category-specific questions first
   const categories = ['gold', 'silver', 'govt', 'government', 'fixed income', 'fd', 'mutual fund', 'equity', 'stock', 'crypto'];
   const mentionedCategory = categories.find(cat => lowerPrompt.includes(cat));
   
   if (mentionedCategory) {
     return generateCategoryResponse(mentionedCategory, userPersona);
+  }
+
+  // Check for affirmative responses to learning more
+  const affirmativeResponses = ['yes', 'yeah', 'sure', 'ok', 'okay', 'tell me more', 'learn more', 'show me', 'interested'];
+  const isAffirmative = affirmativeResponses.some(response => lowerPrompt.includes(response));
+  
+  if (isAffirmative && !amount) {
+    return "Great! Which category would you like to learn more about? You can ask about:\n• Gold/Silver\n• Government Schemes\n• Fixed Income\n• Mutual Funds\n• Equities\n• Crypto";
+  }
+
+  // Generate responses based on amount and conversation flow
+  if (amount > 0) {
+    return generateAllocationResponse(amount, userPersona);
   }
 
   // Initial greeting
