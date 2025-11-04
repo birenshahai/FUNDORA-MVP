@@ -12,7 +12,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         className={`
           max-w-xs lg:max-w-md px-5 py-3 rounded-3xl transform transition-all duration-200 hover:scale-105
           ${message.isUser
-            ? 'bg-gradient-to-br from-indigo-600 via-purple-600 to-cyan-500 text-white rounded-br-md shadow-xl border border-white/20'
+            ? 'bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white rounded-br-md shadow-xl border border-slate-600/30'
             : 'bg-white/95 backdrop-blur-lg text-gray-800 rounded-bl-md shadow-xl border border-white/30'
           }
         `}
