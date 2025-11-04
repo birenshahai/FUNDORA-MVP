@@ -216,8 +216,9 @@ Hi ${userName}! Based on your quiz, you're ${personaResult.persona}. How much do
           <button
             onClick={onLogout}
             className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-800 
-                     px-4 py-2 rounded-xl hover:bg-indigo-50 transition-all duration-200
-                     border border-indigo-200 hover:border-indigo-300 hover:shadow-md"
+                       px-4 py-2 rounded-xl hover:bg-indigo-50 transition-all duration-200
+                       border border-indigo-200 hover:border-indigo-300 hover:shadow-md
+                       cursor-pointer"
           >
             <LogOut className="w-5 h-5" />
             <span className="text-sm font-medium">Logout</span>
