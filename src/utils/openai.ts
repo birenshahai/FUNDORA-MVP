@@ -63,7 +63,6 @@ function getPersonaGuidelines(persona?: string): string {
 - Suggest 60-70% in FD/PPF/Debt funds, 30-40% in large-cap equity
 - Focus on tax-saving instruments like PPF and ELSS
 - Recommend shorter lock-in periods and liquid investments`;
-  }
     
     case 'The Planner':
       return `- Focus on goal-based investing and structured planning
@@ -96,6 +95,7 @@ function getPersonaGuidelines(persona?: string): string {
 - Diversify across asset classes including gold/international`;
   }
 }
+
 function generateFallbackResponse(prompt: string, userPersona?: string): string {
   const lowerPrompt = prompt.toLowerCase();
   
@@ -167,7 +167,7 @@ function generateAmountBasedResponse(amount: number, userPersona?: string, promp
   // Small amounts (under ₹10,000)
   if (amount < 10000) {
     if (userPersona === 'The Guardian') {
-      return \`For ₹${amount.toLocaleString('en-IN')}, start with a recurring deposit or small SIP in a debt fund. Even ₹500/month SIP can grow significantly over time.`;
+      return `For ₹${amount.toLocaleString('en-IN')}, start with a recurring deposit or small SIP in a debt fund. Even ₹500/month SIP can grow significantly over time.`;
     }
     if (userPersona === 'The Maverick') {
       return `₹${amount.toLocaleString('en-IN')} is perfect to start! Begin with a small-cap mutual fund SIP of ₹1000-2000/month. Consider Parag Parikh Flexi Cap or Axis Small Cap.`;
