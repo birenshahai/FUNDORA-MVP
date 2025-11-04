@@ -1,4 +1,5 @@
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+import { calculateAssetAllocation, type AllocationResult } from './assetAllocation';
 
 export async function getAIResponse(prompt: string, userPersona?: string): Promise<string> {
   if (!OPENAI_API_KEY) {

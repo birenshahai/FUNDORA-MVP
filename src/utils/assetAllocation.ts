@@ -12,6 +12,11 @@ export interface AllocationResult {
   total_investment: number;
   allocations: AssetAllocation;
   recommended_categories: string[];
+  year_by_year_projection: YearProjection[];
+  final_value: number;
+  portfolio_cagr: number;
+  allocation_pie_data: PieChartData[];
+  growth_chart_data: LineChartData[];
 }
 
 // Asset allocation percentages by persona
@@ -109,7 +114,7 @@ export function calculateAssetAllocation(persona: string, totalAmount: number): 
 
 function calculateGrowthProjections(allocations: AssetAllocation, totalAmount: number, years: number = 10) {
   const year_by_year_projection: YearProjection[] = [];
-  const growth_line_data: LineChartData[] = [];
+  const growth_chart_data: LineChartData[] = [];
   
   // Calculate year-by-year projections
   for (let year = 0; year <= years; year++) {
@@ -129,7 +134,7 @@ function calculateGrowthProjections(allocations: AssetAllocation, totalAmount: n
       asset_breakdown
     });
     
-    growth_line_data.push({
+    growth_chart_data.push({
       year,
       value: Math.round(total_value)
     });
@@ -162,7 +167,7 @@ function calculateGrowthProjections(allocations: AssetAllocation, totalAmount: n
     final_value,
     portfolio_cagr,
     allocation_pie_data,
-    growth_line_data
+    growth_chart_data
   };
 }
 
