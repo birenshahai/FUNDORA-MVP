@@ -1,6 +1,6 @@
 export interface User {
   email: string;
-  persona?: 'Conservative' | 'Balanced' | 'Aggressive';
+  persona?: 'The Guardian' | 'The Planner' | 'The Explorer' | 'The Hustler' | 'The Maverick';
   onboardingComplete: boolean;
 }
 
@@ -16,10 +16,13 @@ export interface PersonaQuestion {
   question: string;
   options: Array<{
     text: string;
-    scores: {
-      Conservative: number;
-      Balanced: number;
-      Aggressive: number;
-    };
+    value: 'A' | 'B' | 'C' | 'D' | 'E';
   }>;
+}
+
+export interface PersonaResult {
+  total_score: number;
+  persona: 'The Guardian' | 'The Planner' | 'The Explorer' | 'The Hustler' | 'The Maverick';
+  description: string;
+  financial_advice: string;
 }

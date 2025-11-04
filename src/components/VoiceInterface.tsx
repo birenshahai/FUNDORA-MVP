@@ -21,7 +21,7 @@ export function VoiceInterface({ user, onUpdateUser, onLogout }: VoiceInterfaceP
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [onboardingAnswers, setOnboardingAnswers] = useState<number[]>([]);
+  const [onboardingAnswers, setOnboardingAnswers] = useState<('A' | 'B' | 'C' | 'D' | 'E')[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   
   const speechService = useRef(new SpeechService());
@@ -132,27 +132,27 @@ Please provide specific investment advice tailored to their profile and the exac
     setIsProcessing(false);
   };
 
-  const handleOnboardingAnswer = (answerIndex: number) => {
-    const newAnswers = [...onboardingAnswers, answerIndex];
+  const handleOnboardingAnswer = (answerValue: 'A' | 'B' | 'C' | 'D' | 'E') => {
+    const newAnswers = [...onboardingAnswers, answerValue];
     setOnboardingAnswers(newAnswers);
 
-    const selectedOption = onboardingQuestions[currentQuestionIndex].options[answerIndex];
-    addMessage(selectedOption.text, true);
+    const selectedOption = onboardingQuestions[currentQuestionIndex].options.find(opt => opt.value === answerValue);
+    addMessage(selectedOption?.text || '', true);
 
     if (currentQuestionIndex < onboardingQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       // Onboarding complete
-      const persona = calculatePersona(newAnswers);
+      const personaResult = calculatePersona(newAnswers);
       const updatedUser: User = {
         ...user,
-        persona,
+        persona: personaResult.persona,
         onboardingComplete: true,
       };
       
       onUpdateUser(updatedUser);
       
-      const completionMessage = `Great! Based on your responses, I've identified you as a ${persona} investor. I'll tailor my investment advice accordingly. What would you like to know about investing?`;
+      const completionMessage = `Perfect! You scored ${personaResult.total_score}/50. You are "${personaResult.persona}" - ${personaResult.description} ${personaResult.financial_advice} What would you like to know about investing?`;
       const responseMessage = addMessage(completionMessage, false);
       speakMessage(completionMessage);
     }
