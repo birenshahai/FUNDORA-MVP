@@ -19,7 +19,11 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       >
         <p className="text-sm leading-relaxed font-medium">{message.text}</p>
         <p className={`text-xs mt-2 ${message.isUser ? 'text-white/70' : 'text-gray-500'} font-medium`}>
-          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {message.timestamp.toLocaleDateString('en-GB', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric' 
+          })} {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </p>
       </div>
     </div>
