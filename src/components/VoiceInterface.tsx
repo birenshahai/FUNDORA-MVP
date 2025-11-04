@@ -7,6 +7,7 @@ import { MessageBubble } from './MessageBubble';
 import { OnboardingQuestion } from './OnboardingQuestion';
 import { SpeechService } from '../utils/speech';
 import { getAIResponse } from '../utils/openai';
+import { calculateAssetAllocation } from '../utils/assetAllocation';
 import { onboardingQuestions, calculatePersona } from '../data/onboarding';
 import type { User, Message } from '../types';
 

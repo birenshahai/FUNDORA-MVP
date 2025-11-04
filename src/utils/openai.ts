@@ -196,46 +196,36 @@ function generateAmountBasedResponse(amount: number, userPersona?: string, promp
   return `₹${amount.toLocaleString('en-IN')} allows good diversification: 60% equity mix (₹${Math.round(amount * 0.6).toLocaleString('en-IN')}), 25% debt (₹${Math.round(amount * 0.25).toLocaleString('en-IN')}), 15% gold/international (₹${Math.round(amount * 0.15).toLocaleString('en-IN')}).`;
 }
 
-function generateSIPResponse(userPersona?: string): string {
+function generateTaxSavingResponse(userPersona: string): string {
   if (userPersona === 'The Guardian') {
-    return "For SIP, start with debt or hybrid funds. ₹2000/month in HDFC Corporate Bond + ₹1000 in balanced fund works well for steady growth.";
+    return "For tax saving: PPF and ELSS funds work well. What amount are you planning to invest for tax benefits?";
   }
   if (userPersona === 'The Maverick') {
-    return "SIP is perfect for equity! Try ₹3000 in Axis Bluechip + ₹2000 in Parag Parikh Flexi Cap. Start small, increase by 10% annually.";
+    return "Maximize ELSS for 80C benefits! What's your total investment amount?";
   }
-  return "Balanced SIP approach: ₹2000 in Nifty Index + ₹1500 in debt fund. Simple, cost-effective, and well-diversified.";
-}
-
-function generateTaxSavingResponse(userPersona?: string): string {
-  if (userPersona === 'The Guardian') {
-    return "For tax saving: PPF (₹1.5L annually) + ELSS funds like Axis Long Term Equity. PPF gives guaranteed returns, ELSS offers growth potential.";
-  }
-  if (userPersona === 'The Maverick') {
-    return "Maximize ELSS for 80C! Try Mirae Asset Tax Saver or Axis Long Term Equity. ₹1.5L investment can save ₹46,800 in taxes (30% bracket).";
-  }
-  return "Balanced tax saving: ₹1L in PPF + ₹50K in ELSS funds. This gives guaranteed returns plus equity growth with tax benefits.";
+  return "Tax-saving investments like PPF and ELSS are great options. What amount would you like to invest?";
 }
 
 function generateEmergencyFundResponse(): string {
   return "Emergency fund should be 6-12 months of expenses in liquid investments. Use savings account + liquid funds. Keep it separate from investment goals!";
 }
 
-function generateMutualFundResponse(userPersona?: string): string {
+function generateMutualFundResponse(userPersona: string): string {
   if (userPersona === 'The Guardian') {
-    return "For conservative mutual funds: Corporate bond funds, banking PSU funds, or hybrid conservative funds. They offer better returns than FDs with moderate risk.";
+    return "Conservative mutual funds like debt and hybrid funds work well for you. What amount are you planning to invest?";
   }
   if (userPersona === 'The Maverick') {
-    return "Aggressive mutual funds: Small-cap, mid-cap, or sectoral funds. Try Axis Small Cap or SBI Small Cap for high growth potential over 5+ years.";
+    return "Aggressive mutual funds like small-cap and mid-cap funds suit your profile. What's your investment amount?";
   }
-  return "Balanced mutual fund approach: Large-cap + mid-cap combo or balanced hybrid funds. HDFC Top 100 + Axis Midcap works well.";
+  return "Balanced mutual funds are great for diversification. What amount would you like to invest?";
 }
 
-function generateFDResponse(userPersona?: string): string {
+function generateFDResponse(userPersona: string): string {
   if (userPersona === 'The Guardian') {
-    return "FDs are great for guaranteed returns! Current rates: 6-7%. For better tax efficiency, consider debt mutual funds for amounts above ₹1 lakh.";
+    return "FDs are perfect for guaranteed returns! What amount are you considering for FDs?";
   }
   if (userPersona === 'The Maverick') {
-    return "FDs are safe but inflation-beating is tough. Consider only for emergency funds. For growth, equity mutual funds historically outperform FDs significantly.";
+    return "FDs are safe but consider equity for better growth. What's your total investment amount?";
   }
-  return "FDs work for short-term goals (1-3 years). For longer terms, mix FDs with mutual funds for better inflation-adjusted returns.";
+  return "FDs are good for short-term goals. What amount are you planning to invest?";
 }
