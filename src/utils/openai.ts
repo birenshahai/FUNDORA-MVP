@@ -96,10 +96,11 @@ function generateFallbackResponse(prompt: string, userPersona?: string, userName
   }
 
   // Check for category-specific questions first
-  const categories = ['gold', 'silver', 'govt', 'government', 'fixed income', 'fd', 'mutual fund', 'equity', 'stock', 'crypto'];
+  const categories = ['gold', 'silver', 'govt', 'government', 'government schemes', 'fixed income', 'fixed', 'fd', 'mutual fund', 'mutual funds', 'mutual', 'equity', 'equities', 'stock', 'stocks', 'crypto', 'cryptocurrency', 'bitcoin'];
   const mentionedCategory = categories.find(cat => lowerPrompt.includes(cat));
   
   if (mentionedCategory) {
+    console.log('Detected category:', mentionedCategory); // Debug log
     return generateCategoryResponse(mentionedCategory, userPersona);
   }
 
@@ -153,12 +154,20 @@ function generateCategoryResponse(category: string, userPersona?: string): strin
     'silver': 'Gold/Silver',
     'govt': 'Govt Schemes',
     'government': 'Govt Schemes',
+    'government schemes': 'Govt Schemes',
     'fixed income': 'Fixed Income',
     'fd': 'Fixed Income',
+    'fixed': 'Fixed Income',
     'mutual fund': 'Mutual Funds',
+    'mutual funds': 'Mutual Funds',
+    'mutual': 'Mutual Funds',
     'equity': 'Equities',
+    'equities': 'Equities',
     'stock': 'Equities',
-    'crypto': 'Crypto'
+    'stocks': 'Equities',
+    'crypto': 'Crypto',
+    'cryptocurrency': 'Crypto',
+    'bitcoin': 'Crypto'
   };
 
   const actualCategory = categoryMap[category] || 'Mutual Funds';
