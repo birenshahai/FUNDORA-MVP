@@ -294,7 +294,7 @@ Hi ${userName}! Based on your quiz, you're ${personaResult.persona}. How much do
             />
             
             <div className="text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-white">
                 {isListening 
                   ? "Listening... Speak now"
                   : isSpeaking 
