@@ -95,6 +95,13 @@ function generateFallbackResponse(prompt: string, userPersona?: string, userName
     }
   }
 
+  // Check for platform/returns requests
+  const platformKeywords = ['platform', 'platforms', 'returns', 'current returns', 'show me', 'tell me current', 'where to invest', 'how to invest'];
+  const isPlatformRequest = platformKeywords.some(keyword => lowerPrompt.includes(keyword));
+  
+  if (isPlatformRequest) {
+    return generatePlatformResponse();
+  }
   // Check for category-specific questions first
   const categories = ['gold', 'silver', 'govt', 'government', 'government schemes', 'fixed income', 'fixed', 'fd', 'mutual fund', 'mutual funds', 'mutual', 'equity', 'equities', 'stock', 'stocks', 'crypto', 'cryptocurrency', 'bitcoin'];
   const mentionedCategory = categories.find(cat => lowerPrompt.includes(cat));
@@ -105,11 +112,11 @@ function generateFallbackResponse(prompt: string, userPersona?: string, userName
   }
 
   // Check for affirmative responses to learning more
-  const affirmativeResponses = ['yes', 'yeah', 'sure', 'ok', 'okay', 'tell me more', 'learn more', 'show me', 'interested'];
+  const affirmativeResponses = ['yes', 'yeah', 'sure', 'ok', 'okay', 'tell me more', 'learn more', 'interested'];
   const isAffirmative = affirmativeResponses.some(response => lowerPrompt.includes(response));
   
   if (isAffirmative && !amount) {
-    return "Great! Which category would you like to learn more about? You can ask about:\n• Gold/Silver\n• Government Schemes\n• Fixed Income\n• Mutual Funds\n• Equities\n• Crypto";
+    return generatePlatformResponse();
   }
 
   // Generate responses based on amount and conversation flow
@@ -183,4 +190,24 @@ function generateCategoryResponse(category: string, userPersona?: string): strin
   response += `Would you like me to show example platforms or current returns for this category?`;
 
   return response;
+}
+
+function generatePlatformResponse(): string {
+  return `**Current Investment Platforms & Returns (as of 2024):**
+
+**🏛️ Government Schemes:**
+• PPF: 7.1% annual return (15-year lock-in)
+• NSC: 6.8% annual return (5-year term)
+• Sukanya Samridhi: 8.2% annual return
+• ELSS Tax Saver: 10-15% average returns
+
+**📱 Trusted Platforms:**
+• **Groww** - Beginner-friendly, zero brokerage on mutual funds
+• **Zerodha** - Low-cost trading, excellent research tools
+• **Kuvera** - Free mutual fund investments
+• **HDFC Securities** - Full-service broker with advisory
+
+**⚠️ Important:** Always review historical returns, expense ratios, and lock-in periods before investing. Past performance doesn't guarantee future results.
+
+Would you like specific recommendations for your ${userPersona || 'investment'} profile?`;
 }
